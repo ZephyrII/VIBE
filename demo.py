@@ -51,7 +51,7 @@ MIN_NUM_FRAMES = 25
 def main(args):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-    video_file = args.vid_file
+    video_file = "/home/ubuntu/volume_shared/dev/VIBE/demo.py"
 
     # ========= [Optional] download the youtube video ========= #
     if video_file.startswith('https://www.youtube.com'):
@@ -69,7 +69,10 @@ def main(args):
     output_path = os.path.join(args.output_folder, os.path.basename(video_file).replace('.mp4', ''))
     os.makedirs(output_path, exist_ok=True)
 
-    image_folder, num_frames, img_shape = video_to_images(video_file, return_info=True)
+    # image_folder, num_frames, img_shape = video_to_images(video_file, return_info=True)
+    image_folder= "/home/tnowak/data/psg_broadcast_leipzig-12_50/tmp/" 
+    num_frames = 250
+    img_shape = (1080, 1920)
 
     print(f'Input video number of frames {num_frames}')
     orig_height, orig_width = img_shape[:2]
@@ -81,7 +84,7 @@ def main(args):
     if args.tracking_method == 'pose':
         if not os.path.isabs(video_file):
             video_file = os.path.join(os.getcwd(), video_file)
-        tracking_results = run_posetracker(video_file, staf_folder=args.staf_dir, display=args.display)
+        tracking_results = run_posetracker(video_file, staf_folder="", posetrack_output_folder="/home/tnowak/data/open_pose_keypoints/output_json_folder/", display=args.display)
     else:
         # run multi object tracker
         mot = MPT(
@@ -336,9 +339,9 @@ def main(args):
         save_name = os.path.join(output_path, save_name)
         print(f'Saving result video to {save_name}')
         images_to_video(img_folder=output_img_folder, output_vid_file=save_name)
-        shutil.rmtree(output_img_folder)
+        # shutil.rmtree(output_img_folder)
 
-    shutil.rmtree(image_folder)
+    # shutil.rmtree(image_folder)
     print('================= END =================')
 
 
@@ -354,7 +357,7 @@ if __name__ == '__main__':
     parser.add_argument('--tracking_method', type=str, default='bbox', choices=['bbox', 'pose'],
                         help='tracking method to calculate the tracklet of a subject from the input video')
 
-    parser.add_argument('--detector', type=str, default='yolo', choices=['yolo', 'maskrcnn'],
+    parser.add_argument('--detector', type=str, default='maskrcnn', choices=['yolo', 'maskrcnn'],
                         help='object detector to be used for bbox tracking')
 
     parser.add_argument('--yolo_img_size', type=int, default=416,

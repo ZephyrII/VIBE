@@ -288,7 +288,7 @@ class Regressor(nn.Module):
             'verts'  : pred_vertices,
             'kp_2d'  : pred_keypoints_2d,
             'kp_3d'  : pred_joints,
-            'rotmat' : pred_rotmat
+            'rotmat' : pred_rotmat,
         }]
         return output
 

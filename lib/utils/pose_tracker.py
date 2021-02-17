@@ -79,18 +79,18 @@ def read_posetrack_keypoints(output_folder):
 
 
 def run_posetracker(video_file, staf_folder, posetrack_output_folder='/tmp', display=False):
-    posetrack_output_folder = os.path.join(
-        posetrack_output_folder,
-        f'{os.path.basename(video_file)}_posetrack'
-    )
+    # posetrack_output_folder = os.path.join(
+    #     posetrack_output_folder,
+    #     f'{os.path.basename(video_file)}_posetrack'
+    # )
 
-    # run posetrack on video
-    run_openpose(
-        video_file,
-        posetrack_output_folder,
-        vis=display,
-        staf_folder=staf_folder
-    )
+    # # run posetrack on video
+    # run_openpose(
+    #     video_file,
+    #     posetrack_output_folder,
+    #     vis=display,
+    #     staf_folder=staf_folder
+    # )
 
     people_dict = read_posetrack_keypoints(posetrack_output_folder)
 

@@ -43,14 +43,14 @@ class Inference(Dataset):
 
         self.norm_joints2d = np.zeros_like(self.joints2d)
 
-        if self.has_keypoints:
-            bboxes, time_pt1, time_pt2 = get_all_bbox_params(joints2d, vis_thresh=0.3)
-            bboxes[:, 2:] = 150. / bboxes[:, 2:]
-            self.bboxes = np.stack([bboxes[:, 0], bboxes[:, 1], bboxes[:, 2], bboxes[:, 2]]).T
+        # if self.has_keypoints:
+        #     bboxes, time_pt1, time_pt2 = get_all_bbox_params(joints2d, vis_thresh=0.3)
+        #     bboxes[:, 2:] = 150. / bboxes[:, 2:]
+        #     self.bboxes = np.stack([bboxes[:, 0], bboxes[:, 1], bboxes[:, 2], bboxes[:, 2]]).T
 
-            self.image_file_names = self.image_file_names[time_pt1:time_pt2]
-            self.joints2d = joints2d[time_pt1:time_pt2]
-            self.frames = frames[time_pt1:time_pt2]
+        #     self.image_file_names = self.image_file_names[time_pt1:time_pt2]
+        #     self.joints2d = joints2d[time_pt1:time_pt2]
+        #     self.frames = frames[time_pt1:time_pt2]
 
     def __len__(self):
         return len(self.image_file_names)
