@@ -49,10 +49,13 @@ class TemporalEncoder(nn.Module):
             self.linear = nn.Linear(hidden_size, 2048)
         self.use_residual = use_residual
 
-    def forward(self, x):
+    def forward(self, x, hs):
         n,t,f = x.shape
         x = x.permute(1,0,2) # NTF -> TNF
-        y, _ = self.gru(x)
+        if hs is not None:
+            hs = hs.permute(1,0,2).contiguous()
+            self.gru.flatten_parameters()
+        y, hs = self.gru(x, hs)
         if self.linear:
             y = F.relu(y)
             y = self.linear(y.view(-1, y.size(-1)))
@@ -60,7 +63,9 @@ class TemporalEncoder(nn.Module):
         if self.use_residual and y.shape[-1] == 2048:
             y = y + x
         y = y.permute(1,0,2) # TNF -> NTF
-        return y
+        if hs is not None:
+            hs = hs.permute(1,0,2)
+        return y, hs
 
 
 class VIBE(nn.Module):
@@ -157,14 +162,14 @@ class VIBE_Demo(nn.Module):
             print(f'=> loaded pretrained model from \'{pretrained}\'')
 
 
-    def forward(self, input, J_regressor=None):
+    def forward(self, input, hs=None, J_regressor=None):
         # input size NTF
         batch_size, seqlen, nc, h, w = input.shape
 
         feature = self.hmr.feature_extractor(input.reshape(-1, nc, h, w))
 
         feature = feature.reshape(batch_size, seqlen, -1)
-        feature = self.encoder(feature)
+        feature, hs = self.encoder(feature, hs)
         feature = feature.reshape(-1, feature.size(-1))
 
         smpl_output = self.regressor(feature, J_regressor=J_regressor)
@@ -176,4 +181,4 @@ class VIBE_Demo(nn.Module):
             s['kp_3d'] = s['kp_3d'].reshape(batch_size, seqlen, -1, 3)
             s['rotmat'] = s['rotmat'].reshape(batch_size, seqlen, -1, 3, 3)
 
-        return smpl_output
+        return smpl_output, hs
