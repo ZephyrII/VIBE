@@ -27,7 +27,7 @@ MPII3D_DIR = 'data/mpi_inf_3dhp'
 THREEDPW_DIR = 'data/3dpw'
 PENNACTION_DIR = 'data/penn_action'
 POSETRACK_DIR = 'data/posetrack'
-VIBE_DATA_DIR = os.environ['VIBE_ROOT']
+VIBE_DATA_DIR = os.environ['VIBEROOT']
 
 # Configuration variables
 cfg = CN()
@@ -54,7 +54,7 @@ cfg.TRAIN.BATCH_SIZE = 32
 cfg.TRAIN.DATA_2D_RATIO = 0.5
 cfg.TRAIN.START_EPOCH = 0
 cfg.TRAIN.END_EPOCH = 5
-cfg.TRAIN.PRETRAINED_REGRESSOR = os.environ['VIBE_ROOT']+'/spin_model_checkpoint.pth.tar'
+cfg.TRAIN.PRETRAINED_REGRESSOR = os.environ['VIBEROOT']+'/spin_model_checkpoint.pth.tar'
 cfg.TRAIN.PRETRAINED = ''
 cfg.TRAIN.RESUME = ''
 cfg.TRAIN.NUM_ITERS_PER_EPOCH = 1000
